@@ -2,7 +2,7 @@
   "_readme": "Every value below is a working sample so you can walk the hunt today. Replace them with your real ones. Run `node build.mjs` after any change \u2014 it prints every answer back at you and checks the three digits add up.",
 
   "site": {
-    "baseUrl": "https://YOURNAME.github.io/hunt",
+    "baseUrl": "https://duknic.github.io/hunt",
     "title": "Ten Steps",
     "checksum": 13
   },
