@@ -97,8 +97,41 @@ function wireForm(stage) {
     msg.className = 'msg right';
     msg.textContent = stage.after || 'Yes.';
     if (input) input.readOnly = true;
-    setTimeout(() => { location.href = stage.next; }, stage.after ? 2200 : 900);
+    celebrate(stage);
+    const linger = stage.digit ? 2600 : (stage.after ? 2200 : 1500);
+    setTimeout(() => { location.href = stage.next; }, linger);
   });
+}
+
+/* ---------- the tick ---------- */
+
+let cheered = false;
+
+function celebrate(stage) {
+  if (cheered) return;          // double-submit guard
+  cheered = true;
+
+  const reduce = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const el = document.createElement('div');
+  el.className = 'cheer';
+  el.setAttribute('role', 'status');
+  el.innerHTML = `
+    <svg class="cheer-tick" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <path d="M18 52 L40 75 L84 24" />
+    </svg>
+    ${stage.digit ? `<p class="cheer-digit">${stage.digitValue}</p>
+    <p class="cheer-note">One for the code</p>` : ''}`;
+
+  document.body.appendChild(el);
+  if (reduce) el.classList.add('still');
+
+  // Nudge the slot it just landed in.
+  if (stage.digit) {
+    const slot = document.querySelector(`.slot[data-slot="${stage.digit}"]`);
+    if (slot) slot.classList.add('landed');
+  }
 }
 
 /* ---------- revisiting a step already solved ---------- */

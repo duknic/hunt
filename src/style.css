@@ -266,6 +266,8 @@ a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3p
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
+  .cheer-tick path { stroke-dashoffset: 0; }
+  .cheer-digit, .cheer-note { opacity: 1; }
 }
 
 .brief { list-style: none; padding: 0; margin: calc(var(--sq) * 0.5) 0; }
@@ -298,3 +300,82 @@ a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3p
 
 .trail a { text-decoration: none; border-bottom: 1px solid var(--grid-major); }
 .trail a.locked { color: var(--pencil); border-bottom: none; cursor: default; }
+
+
+/* ---- the tick: what a maths teacher draws when you get it right ---- */
+
+.cheer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: calc(var(--sq) * 0.4);
+  background: rgba(243, 245, 242, 0.86);
+  animation: wash 0.22s ease-out;
+  pointer-events: none;
+}
+
+@keyframes wash { from { opacity: 0; } to { opacity: 1; } }
+
+.cheer-tick {
+  width: min(38vw, 150px);
+  height: min(38vw, 150px);
+  overflow: visible;
+}
+
+.cheer-tick path {
+  fill: none;
+  stroke: var(--pen);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: draw 0.42s 0.12s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.cheer-digit {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--pen);
+  margin: 0;
+  opacity: 0;
+  animation: rise 0.4s 0.5s ease-out forwards;
+}
+
+.cheer-note {
+  font-family: var(--ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pencil);
+  margin: 0;
+  opacity: 0;
+  animation: rise 0.4s 0.62s ease-out forwards;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.slot.landed { animation: land 0.5s 0.45s ease-out; }
+
+@keyframes land {
+  0%   { transform: none; }
+  35%  { transform: scale(1.22) rotate(-4deg); }
+  100% { transform: none; }
+}
+
+/* Everything still shows, it just arrives all at once. */
+.cheer.still,
+.cheer.still * { animation: none !important; }
+.cheer.still .cheer-tick path { stroke-dashoffset: 0; }
+.cheer.still .cheer-digit,
+.cheer.still .cheer-note { opacity: 1; }
