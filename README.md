@@ -32,6 +32,12 @@ Open `http://localhost:8000`. The gate answer is `sample`.
 
 Everything is in `stages.json`. After any change, run `node build.mjs` — it prints every answer back at you, checks the three digits add up to your checksum, and flags any `CHANGEME` you forgot.
 
+### Going back over finished steps
+
+A solved step stays open. Revisit it and the answer she gave is filled back in, read-only, with a **Forward** link to carry on — she never has to remember or retype anything. The footer of every step has **Back**, **All ten**, and (once solved) **Forward**. On the front page, the finished steps in the list become links, and the button reads *Pick up where I was* and jumps to the first step she hasn't done.
+
+Steps she hasn't reached still show the "not yet" page rather than a spoiler.
+
 **Answer matching is deliberately forgiving.** Case, spaces and punctuation are stripped before comparison, so `Sample`, `sample` and `the sample` all... no — `the sample` won't match, but `SAMPLE ` and `Sample` will. Spelling is never the puzzle.
 
 ### Stage types

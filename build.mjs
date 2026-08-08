@@ -112,6 +112,13 @@ stages.forEach((s, i) => {
         : s.digitFrom === 'last' ? String(s.answer).slice(-1) : String(s.answer))
     : undefined;
 
+  const backTo = i > 0 ? `../${stages[i - 1].id}/` : '../../';
+  body += `<nav class="nav">
+  <a class="back" href="${backTo}">&larr; Back</a>
+  <a class="all" href="../../">All ten</a>
+  <a class="fwd" href="${nextFromStage(i + 1)}" hidden>Forward &rarr;</a>
+</nav>`;
+
   const stageData = {
     id: s.id,
     base,
@@ -146,7 +153,7 @@ stages.filter(s => s.qr).forEach(s => {
 /* ---------- front page ---------- */
 
 const trail = `<ul class="trail" id="trail">${stages.map(s =>
-  `<li data-id="${s.id}"><span class="n">${esc(s.label)}</span><span>${esc(s.title)}</span><span class="state locked" style="margin-left:auto"></span></li>`
+  `<li data-id="${s.id}"><span class="n">${esc(s.label)}</span><a href="s/${s.id}/">${esc(s.title)}</a><span class="state locked" style="margin-left:auto"></span></li>`
 ).join('')}</ul>`;
 
 writeFileSync(join(out, 'index.html'), page({
@@ -158,6 +165,7 @@ writeFileSync(join(out, 'index.html'), page({
     home: './',
     hash: sha(cfg.gate.answer),
     plain: cfg.gate.answer,
+    order: stages.map(st => ({ id: st.id, url: `s/${st.id}/` })),
     next: 's/' + stages[0].id + '/',
     requires: null
   },

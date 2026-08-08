@@ -4,17 +4,20 @@ const KEY = 'hunt.v1';
 
 const store = {
   read() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || { solved: [], digits: {} }; }
-    catch { return { solved: [], digits: {} }; }
+    const blank = { solved: [], digits: {}, answers: {} };
+    try { return Object.assign(blank, JSON.parse(localStorage.getItem(KEY))); }
+    catch { return blank; }
   },
   write(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} },
-  solve(id, digit, value) {
+  solve(id, digit, value, typed) {
     const s = this.read();
     if (!s.solved.includes(id)) s.solved.push(id);
     if (digit) s.digits[digit] = value;
+    if (typed !== undefined) s.answers[id] = typed;
     this.write(s);
     return s;
   },
+  isSolved(id) { return this.read().solved.includes(id); },
   reset() { try { localStorage.removeItem(KEY); } catch {} }
 };
 
@@ -85,17 +88,65 @@ function wireForm(stage) {
     if (await sha256(given) !== stage.hash) {
       msg.className = 'msg wrong';
       msg.textContent = 'Not that. Try again, or message me.';
-      input.select();
+      if (input.select) input.select();
       return;
     }
 
-    store.solve(stage.id, stage.digit, stage.digitValue);
+    store.solve(stage.id, stage.digit, stage.digitValue, input ? input.value.trim() : '');
     paintSlots();
     msg.className = 'msg right';
     msg.textContent = stage.after || 'Yes.';
-    input.disabled = true;
+    if (input) input.readOnly = true;
     setTimeout(() => { location.href = stage.next; }, stage.after ? 2200 : 900);
   });
+}
+
+/* ---------- revisiting a step already solved ---------- */
+
+/* Where "forward" goes: the next thing she hasn't done, not blindly step one. */
+function resumeTarget(stage) {
+  if (!stage.order) return stage.next;
+  const { solved } = store.read();
+  const next = stage.order.find(o => !solved.includes(o.id));
+  return next ? next.url : stage.order[stage.order.length - 1].url;
+}
+
+function restore(stage) {
+  if (!stage.id || !store.isSolved(stage.id)) return false;
+
+  const form = document.querySelector('form');
+  const input = form && form.querySelector('input[type=text]');
+  const msg = document.querySelector('.msg');
+  const button = form && form.querySelector('button[type=submit]');
+
+  if (input && !input.hidden) {
+    input.value = store.read().answers[stage.id] || '';
+    input.readOnly = true;
+  }
+  if (button) {
+    button.textContent = stage.order ? 'Pick up where I was' : 'Forward';
+    button.type = 'button';
+    button.addEventListener('click', () => { location.href = resumeTarget(stage); });
+  }
+  if (msg) { msg.className = 'msg right'; msg.textContent = stage.after || 'Answered.'; }
+
+  // Geo step: she's already found it, so don't make her walk there again.
+  const start = document.querySelector('#start');
+  if (start) {
+    start.hidden = true;
+    const reveal = document.querySelector('#reveal');
+    if (reveal) reveal.hidden = false;
+  }
+  return true;
+}
+
+/* ---------- footer navigation ---------- */
+
+function wireNav(stage) {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+  const fwd = nav.querySelector('.fwd');
+  if (fwd && store.isSolved(stage.id)) fwd.hidden = false;
 }
 
 /* ---------- geolocation: warmer / colder ---------- */
@@ -215,13 +266,17 @@ function wireDev(stage) {
 
 /* ---------- boot ---------- */
 
+window.addEventListener('pageshow', e => { if (e.persisted) paintSlots(); });
+
 window.addEventListener('DOMContentLoaded', () => {
   const stage = window.STAGE || {};
   isDev();
   paintSlots();
   if (!guard(stage)) return;
-  wireForm(stage);
-  wireGeo(stage);
+
+  const done = restore(stage);
+  if (!done) { wireForm(stage); wireGeo(stage); }
+  wireNav(stage);
   wireDev(stage);
 
   const trail = document.querySelector('#trail');
@@ -233,6 +288,11 @@ window.addEventListener('DOMContentLoaded', () => {
       const done = solved.includes(li.dataset.id);
       state.textContent = done ? 'done' : 'locked';
       state.className = 'state ' + (done ? 'done' : 'locked');
+      const link = li.querySelector('a');
+      if (link && !done && !isDev()) {
+        link.removeAttribute('href');
+        link.classList.add('locked');
+      }
     });
   }
 });
