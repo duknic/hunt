@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Print — maths</title>
+<style>
+@page { size: A4; margin: 12mm; }
+body { font-family: 'Space Grotesk', system-ui, sans-serif; margin: 0; }
+.sheet { width: 180mm; height: 180mm; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); page-break-after: always; }
+.cell { border: 0.3mm dashed #999; display: grid; place-items: center; overflow: hidden; position: relative; }
+.qr { width: 100%; height: 100%; background-image: url('qr-maths.png'); background-size: 300% 300%; }
+.cell span { font-size: 34pt; text-align: center; padding: 6mm; }
+h1 { font-size: 10pt; font-weight: 400; color: #666; margin: 0 0 4mm; }
+@media print { h1 { display: none; } }
+</style></head><body>
+<h1>maths — front (QR). Print double-sided, flip on long edge. Cut on the dashed lines and trim the outer margin.</h1>
+<div class="sheet"><div class="cell"><div class="qr" style="background-position:0% 0%"></div></div><div class="cell"><div class="qr" style="background-position:50% 0%"></div></div><div class="cell"><div class="qr" style="background-position:100% 0%"></div></div><div class="cell"><div class="qr" style="background-position:0% 50%"></div></div><div class="cell"><div class="qr" style="background-position:50% 50%"></div></div><div class="cell"><div class="qr" style="background-position:100% 50%"></div></div><div class="cell"><div class="qr" style="background-position:0% 100%"></div></div><div class="cell"><div class="qr" style="background-position:50% 100%"></div></div><div class="cell"><div class="qr" style="background-position:100% 100%"></div></div></div>
+<h1>maths — back</h1>
+<div class="sheet"><div class="cell"><span>3! ÷ 2</span></div><div class="cell"><span>primes below 5</span></div><div class="cell"><span>√49 − 6</span></div><div class="cell"><span>edges of a tetrahedron</span></div><div class="cell"><span>Platonic solids</span></div><div class="cell"><span>2⁴ ÷ 4</span></div><div class="cell"><span>3²</span></div><div class="cell"><span>2³</span></div><div class="cell"><span>the 4th prime</span></div></div>
+</body></html>

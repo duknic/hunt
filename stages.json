@@ -1,0 +1,182 @@
+{
+  "_readme": "Every value below is a working sample so you can walk the hunt today. Replace them with your real ones. Run `node build.mjs` after any change \u2014 it prints every answer back at you and checks the three digits add up.",
+
+  "site": {
+    "baseUrl": "https://YOURNAME.github.io/hunt",
+    "title": "Ten Steps",
+    "checksum": 13
+  },
+
+  "gate": {
+    "prompt": "Before anything else. What was the name of the pub?",
+    "answer": "sample",
+    "placeholder": "one word"
+  },
+
+  "briefing": [
+    "This will take you out of the house, so put shoes on.",
+    "About ninety minutes. No timer, no rush, nothing expires.",
+    "Charge your phone. Everything lives on it.",
+    "Take a pen and something to write on.",
+    "Say yes when Safari asks for your location.",
+    "Message me any time, about anything. There is no penalty and I am not scoring you."
+  ],
+
+  "stages": [
+    {
+      "id": "shelf",
+      "label": "One",
+      "title": "The shelf",
+      "clue": [
+        "Four of us have turned our backs on you.",
+        "Dark is nothing. Light is one.",
+        "Read those four left to right, then count that many in from the left of the shelf."
+      ],
+      "answer": "11",
+      "inputLabel": "Which book?",
+      "placeholder": "a number",
+      "after": "Inside the front cover."
+    },
+    {
+      "id": "tiles",
+      "label": "Two",
+      "title": "The liar",
+      "clue": [
+        "There are more of us in that room than you think, and every one of us is a square.",
+        "But one of us is lying.",
+        "Count us. Then find the liar."
+      ],
+      "answer": "48",
+      "inputLabel": "How many?",
+      "placeholder": "a number",
+      "after": "Now look at what the liar is wearing."
+    },
+    {
+      "id": "barcode",
+      "label": "Three",
+      "title": "The lie detector",
+      "clue": [
+        "Every barcode carries a lie detector in its last digit. Someone has been at this one with a marker."
+      ],
+      "barcode": "931234567890",
+      "note": "From the left: multiply the 1st, 3rd, 5th\u2026 digits by 1, and the 2nd, 4th, 6th\u2026 by 3. Add it all up. The check digit is whatever gets you to the next multiple of ten.",
+      "answer": "7",
+      "inputLabel": "The missing digit",
+      "placeholder": "0\u20139",
+      "digit": 1
+    },
+    {
+      "id": "cipher",
+      "label": "Four",
+      "title": "Page, line, word",
+      "clue": [
+        "The book knows which book."
+      ],
+      "cipher": [[112, 4, 3], [58, 11, 7], [203, 2, 1]],
+      "answer": "pelican",
+      "inputLabel": "The word you decoded",
+      "placeholder": "one word",
+      "after": "Message him now. He may take a few minutes to reply \u2014 don't stand around waiting. Keep going."
+    },
+    {
+      "id": "words",
+      "label": "Five",
+      "title": "Three words",
+      "clue": [
+        "Three words will take you there, and you already have all three.",
+        "You just don't know what order they go in."
+      ],
+      "words": [
+        { "word": "kettle", "pairedWith": "the book" },
+        { "word": "harbour", "pairedWith": "the tiles" },
+        { "word": "lantern", "pairedWith": "the check digit" }
+      ],
+      "note": "Smallest to largest. Then type them into what3words.",
+      "answer": "45812",
+      "inputLabel": "The number you found there",
+      "placeholder": "as written",
+      "digit": 2,
+      "digitFrom": "last"
+    },
+    {
+      "id": "cousin",
+      "label": "Six",
+      "title": "The reply",
+      "clue": [
+        "By now he should have written back.",
+        "Do what he says."
+      ],
+      "answer": "magpie",
+      "inputLabel": "What he told you",
+      "placeholder": "one word"
+    },
+    {
+      "id": "hunt",
+      "label": "Seven",
+      "title": "Warmer",
+      "type": "geo",
+      "clue": [
+        "There is no address for this one.",
+        "Walk. I'll tell you if you're getting closer."
+      ],
+      "lat": -37.81400,
+      "lng": 144.96300,
+      "unlockRadius": 40,
+      "reveal": "Stop. It's within arm's reach of you \u2014 low down, tucked out of sight.",
+      "answer": "tin",
+      "inputLabel": "The word on the lid",
+      "placeholder": "one word"
+    },
+    {
+      "id": "maths",
+      "label": "Eight",
+      "title": "Nine pieces",
+      "clue": [
+        "Sort them. Smallest to largest, left to right, top to bottom.",
+        "Then turn the whole thing over."
+      ],
+      "qr": true
+    },
+    {
+      "id": "home",
+      "label": "Nine",
+      "title": "The way back",
+      "clue": [
+        "Go home.",
+        "There is something on the kitchen table that wasn't there when you left."
+      ],
+      "answer": "envelope",
+      "inputLabel": "What's on the table?",
+      "placeholder": "one word"
+    },
+    {
+      "id": "photo",
+      "label": "Ten",
+      "title": "Us",
+      "clue": [
+        "Put us back together.",
+        "The small numbers in the corners are so you don't lose your place when you turn it over."
+      ],
+      "qr": true,
+      "digit": 3,
+      "digitValue": 4
+    }
+  ],
+
+  "jigsaws": [
+    {
+      "id": "maths",
+      "backs": ["\u221a49 \u2212 6", "primes below 5", "3! \u00f7 2", "2\u2074 \u00f7 4", "Platonic solids", "edges of a tetrahedron", "the 4th prime", "2\u00b3", "3\u00b2"]
+    },
+    {
+      "id": "photo",
+      "backs": ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    }
+  ],
+
+  "finale": {
+    "heading": "That's all three.",
+    "body": "Add them up. If they don't make the number below, one of them slipped somewhere and you should message me.",
+    "where": "It's the padlock on the thing in the hallway. You'll know it when you see it."
+  }
+}

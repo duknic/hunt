@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location check</title>
+<link rel="stylesheet" href="../assets/style.css"></head>
+<body><main class="wrap">
+<p class="eyebrow">Diagnostic</p>
+<h1>Location check</h1>
+<div class="clue"><p>Tap the button. If accuracy comes back under about 20 metres, the hunt will work.</p></div>
+<button id="go">Check my location</button>
+<p class="temp cold" id="acc">&nbsp;</p>
+<p class="readout" id="out"></p>
+<p class="note">Accuracy over 1000m means Precise Location is off: Settings &rarr; Privacy &amp; Security &rarr; Location Services &rarr; Safari Websites.</p>
+<script>
+document.getElementById('go').addEventListener('click', function () {
+  var acc = document.getElementById('acc'), out = document.getElementById('out');
+  acc.textContent = 'Waiting';
+  navigator.geolocation.watchPosition(function (p) {
+    acc.textContent = '±' + Math.round(p.coords.accuracy) + 'm';
+    acc.className = 'temp ' + (p.coords.accuracy <= 20 ? 'warm' : 'cold');
+    out.textContent = p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5);
+  }, function (e) {
+    acc.textContent = 'Failed';
+    out.textContent = 'code ' + e.code + ' — ' + e.message;
+  }, { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 });
+});
+</script>
+</main></body></html>

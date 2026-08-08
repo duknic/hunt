@@ -1,0 +1,10 @@
+{
+  "name": "hunt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node build.mjs && npx --yes serve docs"
+  },
+  "dependencies": { "qrcode": "^1.5.4" }
+}
